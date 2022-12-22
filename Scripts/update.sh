@@ -1,5 +1,6 @@
 #!/bin/bash
-cd src
-make clean
+mkdir build
+cd build
+cmake ..
 make
 cp B4QFL ../

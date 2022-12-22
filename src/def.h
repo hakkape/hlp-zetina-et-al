@@ -6,7 +6,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <errno.h>
-#include <cplex.h>
+#include <ilcplex/cplex.h>
 #include <stdbool.h>
 #define ABS(x) (((x) > 0 ) ? (x) : -(x))	
 #define getrandom( min, max ) ((rand() % (int) (((max)+1)-(min)))+(min))
