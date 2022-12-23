@@ -32,13 +32,15 @@ endif()
 
 # Create the shared library that we can use with the python wrapper
 set(hlplib_sources
-    # hlpsolver.c
-    # hlpsolver.h
+    src/def.h
     src/Benders_framework.c
     src/Matheuristic.c
     src/Model_info.c
     src/ReadData.c
-    src/def.h)
+    src/USApHMPCsolver.c
+    src/USApHMPCsolver.h
+    src/hlp_reader.c
+    src/hlp_reader.h)
 add_library(hlplib SHARED ${hlplib_sources})
 
 # Link CPLEX

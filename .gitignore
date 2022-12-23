@@ -2,3 +2,4 @@ build/
 *.o
 B4QFL
 Results/Raw_Results/*
+.vscode/
