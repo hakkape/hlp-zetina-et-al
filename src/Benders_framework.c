@@ -115,6 +115,19 @@ void Benders_framework(void)
 	/******************************************************************************************/
 	solve_ip_and_get_solution_info(env, lp, x, start, &best_upper_bound, &best_lower_bound, &nodecount);
 
+	// Store solution
+	solution.sol_val = best_upper_bound;
+	for (int i = 0; i < solution.n_customers; i++)
+	{
+		for (int k = 0; i < NN; i++)
+		{
+			if (x[pos_z[i][k]] > 0.5)
+			{
+				solution.assigned_hubs[i] = k;
+			}
+		}
+	}
+
 TERMINATE:
 	/* Free the allocated vectors */
 	free_and_null((char **)&cutinfo.x);

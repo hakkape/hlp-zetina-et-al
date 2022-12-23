@@ -137,7 +137,8 @@ typedef struct solution
   float sol_val;
   float cputime;
 } Solution;
-Solution *solution;
+
+Solution solution;
 
 /********Carlos's modifications*******/
 typedef struct Solpool
