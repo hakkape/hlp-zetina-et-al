@@ -12,7 +12,10 @@ void read_hlp_instance(const char *hlp_file, const char *hlps_file)
 
     // # Read HLP settings
     hlps_input = open_file(hlps_file, "r");
-    // TODO;
+    fscanf(hlps_input, "%d", &NN);
+    fscanf(hlps_input, "%lf", &collect);
+    fscanf(hlps_input, "%lf", &transfer);
+    fscanf(hlps_input, "%lf", &distribute);
 
     fclose(hlps_input);
     // # Read HLP topology
@@ -47,12 +50,31 @@ void read_hlp_instance(const char *hlp_file, const char *hlps_file)
     }
 
     // ## Demands
+    AggregatedDemand = 0;
+    menor_O = MAX_DOUBLE; // The smallest out demand of any customer (i think)
+    Q = 1;                // We have a single capacity level for facilities
+    Capacitated_instances = 0;
     for (i = 0; i < NN; i++)
     {
+        O[i] = 0; // Total out demand
+        D[i] = 0; // Total in demand
+
         for (j = 0; j < NN; j++)
         {
             fscanf(hlp_input, "%lf", &W[i][j]);
+            O[i] += W[i][j];
+            D[j] += W[i][j];
         }
+        if (O[i] < menor_O)
+            menor_O = O[i];
+        AggregatedDemand += O[i];
+
+        // ## No fixed costs for facilities
+        f[i][0] = 0;
     }
+    // ## Capacity levels -  we don't have any limits
+    for (i = 0; i < NN; i++)
+        b[i][0] = AggregatedDemand;
+
     fclose(hlp_input);
 };

@@ -21,5 +21,6 @@ Solution *solve(const char *hlp_file, const char *hlps_file)
 
     solutionPtr->cputime = cputime;
 
+    free_memory();
     return solutionPtr;
 };
