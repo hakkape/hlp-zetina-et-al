@@ -41,24 +41,24 @@ set(hlplib_sources
     src/USApHMPCsolver.h
     src/hlp_reader.c
     src/hlp_reader.h)
-add_library(hlplib SHARED ${hlplib_sources})
+add_library(hlp SHARED ${hlplib_sources})
 
 # Link CPLEX
-target_link_libraries(hlplib cplex-library ilocplex)
+target_link_libraries(hlp cplex-library ilocplex)
 
 
 # Create the executable
 set(B4QFL_sources src/main.c)
 add_executable(B4QFL ${B4QFL_sources})
-target_link_libraries(B4QFL hlplib)
+target_link_libraries(B4QFL hlp)
 
 # I am not sure if this is necessary, but we will link the libraries that are linked in the makefile
 find_library(MATH_LIBRARY m)
 if(MATH_LIBRARY)
-    target_link_libraries(hlplib ${MATH_LIBRARY})
+    target_link_libraries(hlp ${MATH_LIBRARY})
 endif()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(hlplib Threads::Threads)
-target_link_libraries(hlplib dl)
+target_link_libraries(hlp Threads::Threads)
+target_link_libraries(hlp dl)
