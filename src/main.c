@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
 	vers = -1;			   // Version -1 contains all the bells and whistles
 	use_firstsolution = 1; // Use the first solution found as warm start for the MIP
 	missed = 0;
+	write_outfile = true;
 
 	// Read command line arguments
 	if (argc < 3)

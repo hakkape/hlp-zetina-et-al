@@ -6,6 +6,14 @@ Solution *solve(const char *hlp_file, const char *hlps_file)
 {
     clock_t start, end;
     float cputime;
+    combtol = 0;
+    old_objval = 0;
+    // Default heuristic solution parameters
+    FlagHeuristic = 1;
+    FlagLocalSearch = 1;
+    vers = -1;             // Version -1 contains all the bells and whistles
+    use_firstsolution = 1; // Use the first solution found as warm start for the MIP
+    missed = 0;
 
     // Read input data (it is stored in the globally defined variables from def.h)
     printf(hlp_file);
