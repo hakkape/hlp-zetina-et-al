@@ -119,7 +119,7 @@ void Benders_framework(void)
 	solution.sol_val = best_upper_bound;
 	for (int i = 0; i < solution.n_customers; i++)
 	{
-		for (int k = 0; i < NN; i++)
+		for (int k = 0; k < NN; k++)
 		{
 			if (x[pos_z[i][k]] > 0.5)
 			{
@@ -208,21 +208,28 @@ void solve_ip_and_get_solution_info(CPXENVptr env, CPXLPptr lp, double *x, clock
 	end = clock();
 	cputime = (double)(end - start) / CLOCKS_PER_SEC;
 
-	out = open_file(output_text, "a+");
-	fprintf(out, "%.2f;%.2f;%.2f;%.2lf;%d; ", *best_upper_bound, *best_lower_bound, cputime, (*best_upper_bound - *best_lower_bound) * 100 / *best_upper_bound, *nodecount);
+	if (write_outfile)
+	{
+		out = open_file(output_text, "a+");
+		fprintf(out, "%.2f;%.2f;%.2f;%.2lf;%d; ", *best_upper_bound, *best_lower_bound, cputime, (*best_upper_bound - *best_lower_bound) * 100 / *best_upper_bound, *nodecount);
+		fprintf(out, "hubs:");
+	}
 	printf("Optimal set of hubs: ");
-	fprintf(out, "hubs:");
 	for (i = 0; i < NN; i++)
 	{
 		if (x[pos_z[i][i]] > 0.5)
 		{
 			printf("%d ", i + 1);
-			fprintf(out, "%d ", i + 1);
+			if (write_outfile)
+				fprintf(out, "%d ", i + 1);
 		}
 	}
 	printf("eta: %.2f \n", x[glob_numcols - 1]);
-	fprintf(out, ";");
-	fclose(out);
+	if (write_outfile)
+	{
+		fprintf(out, ";");
+		fclose(out);
+	}
 
 	printf("Upper bound: %f   ", *best_upper_bound);
 	printf("Lower bound: %f   ", *best_lower_bound);
@@ -1166,9 +1173,13 @@ double solve_as_LP(CPXENVptr env, CPXLPptr lp)
 	end = clock();
 	cputime = (double)(end - start) / CLOCKS_PER_SEC;
 	printf("Root node LP bound after PE: %.2f \nBest UB found: %.2lf \nCurrent Gap: %.2lf\% \nPE Time: %.2f \nHubs fixed: %d \nNum Benders cuts: %d\n", value, UpperBound, (UpperBound - value) / value * 100, cputime, count_fixed, count_added);
-	out = open_file(output_text, "a+");
-	fprintf(out, "%.2lf;%.2f;%.2f;%d;%d;", UpperBound, value, cputime, iter, count_fixed);
-	fclose(out);
+
+	if (write_outfile)
+	{
+		out = open_file(output_text, "a+");
+		fprintf(out, "%.2lf;%.2f;%.2f;%d;%d;", UpperBound, value, cputime, iter, count_fixed);
+		fclose(out);
+	}
 	printf("Finished solving root node\n---------------------------\n");
 	return value;
 }

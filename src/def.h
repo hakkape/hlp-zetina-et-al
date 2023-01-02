@@ -130,7 +130,7 @@ typedef struct ORD
 } ORD;
 
 // For storing solutions to return them externally
-typedef struct solution
+typedef struct Solution
 {
   int *assigned_hubs;
   int n_customers;
@@ -139,6 +139,8 @@ typedef struct solution
 } Solution;
 
 Solution solution;
+// Flag to disable writing to outfile
+bool write_outfile;
 
 /********Carlos's modifications*******/
 typedef struct Solpool

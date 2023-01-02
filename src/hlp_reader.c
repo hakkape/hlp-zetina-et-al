@@ -12,17 +12,20 @@ void read_hlp_instance(const char *hlp_file, const char *hlps_file)
 
     // # Read HLP settings
     hlps_input = open_file(hlps_file, "r");
-    fscanf(hlps_input, "%d", &NN);
+    fscanf(hlps_input, "%d", &p_hubs);
     fscanf(hlps_input, "%lf", &collect);
     fscanf(hlps_input, "%lf", &transfer);
     fscanf(hlps_input, "%lf", &distribute);
 
     fclose(hlps_input);
+
     // # Read HLP topology
     hlp_input = open_file(hlp_file, "r");
+    fscanf(hlp_input, "%d", &NN);
+    w_fixed_costs = 0;
+    w_p_median_constr = 1;
 
     // ## Set number of customers and allocate storage for customer assignments
-    fscanf(hlp_input, "%d", &NN);
     initialize_memory();
     solution.n_customers = NN;
     solution.assigned_hubs = malloc(NN * sizeof(int));
