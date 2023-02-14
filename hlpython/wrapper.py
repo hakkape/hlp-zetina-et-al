@@ -36,10 +36,15 @@ def solve(hlp_path, hlps_path):
 if __name__ == "__main__":
     print("Solving CAB instance")
     instances = [
-        ("hlpython/data/10ll.hlp", "hlpython/data/c10_p4_zetina.hlps"),
-        ("hlpython/data/10lt.hlp", "hlpython/data/c10_p4_zetina.hlps"),
-        ("hlpython/data/100ll.hlp", "hlpython/data/c100_p10_zetina.hlps"),
+        ("hlpython/data/10ll.hlp", "hlpython/data/zetina_p5.hlps"),
+        # ("hlpython/data/10lt.hlp", "hlpython/data/c10_p4_zetina.hlps"),
+        # ("hlpython/data/100ll.hlp", "hlpython/data/zetina_p5.hlps"),
     ]
+    # instances = [
+        # ("hlpython/data/ap20_c.hlp", "hlpython/data/p4_a05.hlps"),
+        # ("hlpython/data/cab20_c.hlp", "hlpython/data/p4_a05.hlps"),
+        # ("hlpython/data/tr20_c.hlp", "hlpython/data/p4_a05.hlps"),
+    # ]
 
     for hlp, hlps in instances:
         hlp_file = str(project_root_path / hlp)

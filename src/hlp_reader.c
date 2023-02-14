@@ -43,6 +43,8 @@ void read_hlp_instance(const char *hlp_file, const char *hlps_file)
     double cost;
     for (i = 0; i < NN; i++)
     {
+        O[i] = 0; // Total out demand
+        D[i] = 0; // Total in demand
         for (j = 0; j < NN; j++)
         {
             fscanf(hlp_input, "%lf", &c[i][j]);
@@ -55,13 +57,10 @@ void read_hlp_instance(const char *hlp_file, const char *hlps_file)
     // ## Demands
     AggregatedDemand = 0;
     menor_O = MAX_DOUBLE; // The smallest out demand of any customer (i think)
-    Q = 1;                // We have a single capacity level for facilities
+    Q = 0;                // we have no capacities for facilities
     Capacitated_instances = 0;
     for (i = 0; i < NN; i++)
     {
-        O[i] = 0; // Total out demand
-        D[i] = 0; // Total in demand
-
         for (j = 0; j < NN; j++)
         {
             fscanf(hlp_input, "%lf", &W[i][j]);

@@ -215,6 +215,8 @@ void solve_ip_and_get_solution_info(CPXENVptr env, CPXLPptr lp, double *x, clock
 		fprintf(out, "hubs:");
 	}
 	printf("Optimal set of hubs: ");
+	// CPXwriteprob(env, lp, "test.lp", NULL);
+
 	for (i = 0; i < NN; i++)
 	{
 		if (x[pos_z[i][i]] > 0.5)
