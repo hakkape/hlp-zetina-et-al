@@ -1,13 +1,9 @@
+#!/usr/bin/env python3
 import ctypes
 from pathlib import Path
-
-project_root_path = Path(__file__).parent.parent
-lib_path = project_root_path / "build/libhlp.so"
-_solverlib = ctypes.CDLL(lib_path)
-
+from collections import defaultdict
 
 class Solution(ctypes.Structure):
-    global _solverlib
     _fields_ = [
         ("assigned_hubs", ctypes.POINTER(ctypes.c_int)),
         ("n_customers", ctypes.c_int),
@@ -15,40 +11,65 @@ class Solution(ctypes.Structure):
         ("cputime", ctypes.c_float),
     ]
 
-    # def __del__(self):
-    #     _solverlib.freeSolution(ctypes.byref(self))
 
+class HubLocationZetina():
+    def __init__(self):
+        # get the shared library
+        project_root_path = Path(__file__).parent.parent
+        lib_path = project_root_path / "build/libhlp.so"
+        self._solverlib = ctypes.CDLL(lib_path)
+        self._solverlib.solve.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int]
+        self._solverlib.solve.restype = ctypes.c_void_p
+        self._solverlib.freeSolution.argtypes = [ctypes.POINTER(Solution)]
+        
+        # store solution
+        solution = None
+    def __del__(self):
+        if self.solution is not None:
+            self._solverlib.freeSolution(ctypes.byref(self.solution))
+        print("AGH")
 
-_solverlib.solve.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
-_solverlib.solve.restype = ctypes.c_void_p
-_solverlib.freeSolution.argtypes = [ctypes.POINTER(Solution)]
+    def solve(self, hlp_path, hlps_path, timelimit=None):
+        if timelimit is None:
+            timelimit = 10000000
+        self.solution = Solution.from_address(self._solverlib.solve(hlp_path.encode(), hlps_path.encode(), timelimit))
 
+    @property
+    def solution_dict(self) -> dict[int, list[int]]:
+        """Returns a dictionary where the keys are the opened facilities and the entries are lists of assigned customers."""
+        solution = defaultdict(list)
+        for customer in range(self.solution.n_customers):
+            solution[self.solution.assigned_hubs[customer]].append(customer)
+        return solution
 
-def solve(hlp_path, hlps_path):
-    global _solverlib
-    sol = Solution.from_address(_solverlib.solve(hlp_path.encode(), hlps_path.encode()))
-    print(sol.n_customers)
-    print(sol.sol_val)
-    for i in range(sol.n_customers):
-        print(f"customer {i} was assigned hub {sol.assigned_hubs[i]}")
+    @property
+    def solution_value(self):
+        return self.solution.sol_val
 
+    @property
+    def runtime(self):
+        return self.solution.cpu_time
 
 if __name__ == "__main__":
     print("Solving CAB instance")
     instances = [
-        ("hlpython/data/10ll.hlp", "hlpython/data/zetina_p5.hlps"),
-        # ("hlpython/data/10lt.hlp", "hlpython/data/c10_p4_zetina.hlps"),
+        # ("hlpython/data/10ll.hlp", "hlpython/data/zetina_p5.hlps"),
         # ("hlpython/data/100ll.hlp", "hlpython/data/zetina_p5.hlps"),
-    ]
-    # instances = [
         # ("hlpython/data/ap20_c.hlp", "hlpython/data/p4_a05.hlps"),
         # ("hlpython/data/cab20_c.hlp", "hlpython/data/p4_a05.hlps"),
-        # ("hlpython/data/tr20_c.hlp", "hlpython/data/p4_a05.hlps"),
-    # ]
+        ("hlpython/data/tr20_c.hlp", "hlpython/data/p4_a05.hlps"),
+    ]
 
+    project_root_path = Path(__file__).parent.parent
     for hlp, hlps in instances:
         hlp_file = str(project_root_path / hlp)
         hlps_file = str(project_root_path / hlps)
-
-        solve(hlp_file, hlps_file)
+        solver = HubLocationZetina()
+        solver.solve(hlp_file, hlps_file)
         print("Finished solving")
+
+        sol = solver.solution
+        print(sol.n_customers)
+        print(sol.sol_val)
+        for i in range(sol.n_customers):
+            print(f"customer {i} was assigned hub {sol.assigned_hubs[i]}")

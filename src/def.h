@@ -141,6 +141,7 @@ typedef struct Solution
 Solution solution;
 // Flag to disable writing to outfile
 bool write_outfile;
+int max_time; // maximum time to spend in branch and bound phase
 
 /********Carlos's modifications*******/
 typedef struct Solpool

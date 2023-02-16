@@ -2,7 +2,7 @@
 #include "hlp_reader.h"
 #include "def.h"
 
-Solution *solve(const char *hlp_file, const char *hlps_file)
+Solution *solve(const char *hlp_file, const char *hlps_file, int time_limit)
 {
     clock_t start, end;
     float cputime;
@@ -14,6 +14,7 @@ Solution *solve(const char *hlp_file, const char *hlps_file)
     vers = -1;             // Version -1 contains all the bells and whistles
     use_firstsolution = 1; // Use the first solution found as warm start for the MIP
     missed = 0;
+    max_time = time_limit;
 
     // Read input data (it is stored in the globally defined variables from def.h)
     printf(hlp_file);
@@ -39,5 +40,4 @@ Solution *solve(const char *hlp_file, const char *hlps_file)
 void freeSolution(Solution *solutionPtr)
 {
     free(solutionPtr->assigned_hubs);
-    free(solutionPtr);
 };

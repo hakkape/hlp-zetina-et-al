@@ -28,7 +28,7 @@ void read_hlp_instance(const char *hlp_file, const char *hlps_file)
     // ## Set number of customers and allocate storage for customer assignments
     initialize_memory();
     solution.n_customers = NN;
-    solution.assigned_hubs = malloc(NN * sizeof(int));
+    solution.assigned_hubs = (int *)malloc(NN * sizeof(int));
 
     // Return error if not all assignments are possible as this is not implemented
     char possible_assignments[1000];
