@@ -21,18 +21,27 @@ class HubLocationZetina():
         self._solverlib.solve.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int]
         self._solverlib.solve.restype = ctypes.c_void_p
         self._solverlib.freeSolution.argtypes = [ctypes.POINTER(Solution)]
+        self.hlp_path = None
+        self.hlps_path = None        
         
         # store solution
-        solution = None
+        self.solution = None
+
     def __del__(self):
         if self.solution is not None:
             self._solverlib.freeSolution(ctypes.byref(self.solution))
-        print("AGH")
 
-    def solve(self, hlp_path, hlps_path, timelimit=None):
+    # create model to solve specific instance
+    @classmethod
+    def from_file(cls, hlp_path,hlps_path): 
+        model = HubLocationZetina()
+        model.hlp_path = hlp_path
+        model.hlps_path = hlps_path
+
+    def solve(self, timelimit=None):
         if timelimit is None:
             timelimit = 10000000
-        self.solution = Solution.from_address(self._solverlib.solve(hlp_path.encode(), hlps_path.encode(), timelimit))
+        self.solution = Solution.from_address(self._solverlib.solve(self.hlp_path.encode(), self.hlps_path.encode(), timelimit))
 
     @property
     def solution_dict(self) -> dict[int, list[int]]:
