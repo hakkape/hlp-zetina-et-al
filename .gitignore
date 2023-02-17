@@ -3,3 +3,7 @@ build/
 B4QFL
 Results/Raw_Results/*
 .vscode/
+
+
+# if developing the python package with `pip install -e .`, the following is created:
+*egg-info
