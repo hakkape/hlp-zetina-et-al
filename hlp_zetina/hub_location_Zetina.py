@@ -2,6 +2,8 @@
 import ctypes
 from pathlib import Path
 from collections import defaultdict
+import os
+
 
 class Solution(ctypes.Structure):
     _fields_ = [
@@ -12,18 +14,22 @@ class Solution(ctypes.Structure):
     ]
 
 
-class HubLocationZetina():
+class HubLocationZetina:
     def __init__(self):
         # get the shared library
         project_root_path = Path(__file__).parent.parent
         lib_path = project_root_path / "build/libhlp.so"
         self._solverlib = ctypes.CDLL(lib_path)
-        self._solverlib.solve.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int]
+        self._solverlib.solve.argtypes = [
+            ctypes.c_char_p,
+            ctypes.c_char_p,
+            ctypes.c_int,
+        ]
         self._solverlib.solve.restype = ctypes.c_void_p
         self._solverlib.freeSolution.argtypes = [ctypes.POINTER(Solution)]
         self.hlp_path = None
-        self.hlps_path = None        
-        
+        self.hlps_path = None
+
         # store solution
         self.solution = None
 
@@ -33,15 +39,21 @@ class HubLocationZetina():
 
     # create model to solve specific instance
     @classmethod
-    def from_file(cls, hlp_path,hlps_path): 
+    def from_file(cls, hlp_path, hlps_path):
         model = HubLocationZetina()
-        model.hlp_path = hlp_path
-        model.hlps_path = hlps_path
+        # get absolute paths because otherwise c library can not find files
+        model.hlp_path = os.path.abspath(hlp_path) 
+        model.hlps_path = os.path.abspath(hlps_path)
+        return model
 
     def solve(self, timelimit=None):
         if timelimit is None:
             timelimit = 10000000
-        self.solution = Solution.from_address(self._solverlib.solve(self.hlp_path.encode(), self.hlps_path.encode(), timelimit))
+        self.solution = Solution.from_address(
+            self._solverlib.solve(
+                self.hlp_path.encode(), self.hlps_path.encode(), timelimit
+            )
+        )
 
     @property
     def solution_dict(self) -> dict[int, list[int]]:
@@ -58,6 +70,7 @@ class HubLocationZetina():
     @property
     def runtime(self):
         return self.solution.cpu_time
+
 
 if __name__ == "__main__":
     print("Solving CAB instance")

@@ -7,3 +7,4 @@ Results/Raw_Results/*
 
 # if developing the python package with `pip install -e .`, the following is created:
 *egg-info
+__pycache__
