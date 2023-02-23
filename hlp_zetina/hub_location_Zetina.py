@@ -39,10 +39,10 @@ class HubLocationZetina:
 
     # create model to solve specific instance
     @classmethod
-    def from_file(cls, hlp_path, hlps_path):
+    def from_file(cls, hlp_path, hlps_path, **buildargs):
         model = HubLocationZetina()
         # get absolute paths because otherwise c library can not find files
-        model.hlp_path = os.path.abspath(hlp_path) 
+        model.hlp_path = os.path.abspath(hlp_path)
         model.hlps_path = os.path.abspath(hlps_path)
         return model
 
