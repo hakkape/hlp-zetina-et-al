@@ -69,7 +69,7 @@ class HubLocationZetina:
 
     @property
     def runtime(self):
-        return self.solution.cpu_time
+        return self.solution.cputime
 
 
 if __name__ == "__main__":
