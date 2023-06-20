@@ -35,7 +35,11 @@ int add_variables(CPXENVptr env, CPXLPptr lp) {
 				priority[index1] = 1;
 			}
 			lb[index1] = 0;
-			ub[index1] = 1;
+			// fix non-eligible hub assignments to zero 
+			if (not_eligible_hub[i][k] == 1)
+				ub[index1] = 0;
+			else	
+				ub[index1] = 1;
 			indices[index1] = index1;
 			globvarind[index1] = index1;
 			globvarctype[index1] = 'B';

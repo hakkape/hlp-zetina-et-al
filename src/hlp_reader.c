@@ -9,6 +9,9 @@ void read_hlp_instance(const char *hlp_file, const char *hlps_file)
     // Indices for iterating
     int i;
     int j;
+    int k;
+
+    int n_hubs;
 
     // # Read HLP settings
     hlps_input = open_file(hlps_file, "r");
@@ -33,10 +36,44 @@ void read_hlp_instance(const char *hlp_file, const char *hlps_file)
     // Return error if not all assignments are possible as this is not implemented
     char possible_assignments[1000];
     fscanf(hlp_input, "%s\n", possible_assignments);
-    if (strcmp(possible_assignments, "ALL"))
+    if (strcmp(possible_assignments, "ALL")) 
     {
-        fprintf(stderr, "ERROR: Can currently only deal with instances where all assignments are possible.");
-        exit(1);
+        // case = not all assignments are possible
+        n_hubs = atoi(possible_assignments);
+        char possible_hubs[100000];
+        fscanf(hlp_input, "%[^\n]\n", possible_hubs);  
+
+        // forbid all assignments
+        for (i = 0; i < NN; i++)
+        {
+            for (j = 0; j < NN; j++)
+            {
+                not_eligible_hub[i][j] = 1;
+            }
+        }
+
+        // read allowed assignments
+        char allowed_hubs[100000];
+        for (i = 0; i < NN; i++)
+        {
+            fscanf(hlp_input, "%[^\n]\n", &allowed_hubs); // read line for next customer
+            // extract all hubs that are allowed for this customer (with cursed c string parsing)
+            char *n = strtok(allowed_hubs, " ");
+            do { 
+                k = atoi(n);
+                not_eligible_hub[i][k] = 0;
+            } while (n = strtok(NULL, " "));
+        } 
+
+        // close all hubs that are not possible
+        for (j = 0; j < n_hubs; j++)
+        {
+            k = atoi(&possible_hubs[i]);
+            for (i = 0; i < NN; i++)
+            {
+                not_eligible_hub[i][k] = 1;
+            }
+        }
     }
 
     // ## Costs

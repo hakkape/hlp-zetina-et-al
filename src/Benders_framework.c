@@ -1416,6 +1416,9 @@ int pe_fix_to_zero(CPXENVptr env, CPXLPptr lp, double *x, double value, double *
 	// qsort((ZVAL*)z_closed, count_c, sizeof(z_closed[0]), Comparevalue_zc);
 	for (k = 0; k < count_c; k++)
 	{
+		// if self-assignment is not possible, skip this step
+		if (not_eligible_hub[z_closed[k].k][z_closed[k].k] == 1)
+			continue;
 		// Temporarily fix z_kk = 1 to try to permantely close it (i.e. z_k = 0 from now on)
 		bind[0] = pos_z[z_closed[k].k][z_closed[k].k];
 		realub[0] = 1;

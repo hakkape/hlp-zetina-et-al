@@ -320,6 +320,10 @@ int CFLP_reduced_model(int count_c, ZVAL *z_cand, int *assigmnents, int *open_pl
 			}
 			ctype[index1] = 'B';
 			lb[index1] = 0;
+			if (not_eligible_hub[i][z_cand[k].k] == 1)
+				ub[index1] = 0;
+			else
+				ub[index1] = 1;
 			ub[index1] = 1;
 			index1++;
 		}
@@ -845,7 +849,10 @@ int Reassign_nodes_red(int *best_assigmnent1, int *current_open_plants)
 				obj[index1] = (O[i] * c_c[i][k] + D[i] * c_d[i][k]);
 				ctype[index1] = 'B';
 				lb[index1] = 0;
-				ub[index1] = 1;
+				if (not_eligible_hub[i][k] == 1)
+					ub[index1] = 0;
+				else
+					ub[index1] = 1;
 				index1++;
 			}
 		}
@@ -1068,7 +1075,10 @@ int Reassign_nodes(int* best_assigmnent1)
 				obj[index1] = (O[i] * c_c[i][k] + D[i] * c_d[i][k]);
 				ctype[index1] = 'B';
 				lb[index1] = 0;
-				ub[index1] = 1;
+				if (not_eligible_hub[i][k] == 1)
+					ub[index1] = 0;
+				else
+					ub[index1] = 1;
 				index1++;
 			}
 		}

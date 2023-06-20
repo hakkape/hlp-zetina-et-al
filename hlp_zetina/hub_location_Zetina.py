@@ -75,19 +75,21 @@ class HubLocationZetina:
 if __name__ == "__main__":
     print("Solving CAB instance")
     instances = [
-        # ("hlpython/data/10ll.hlp", "hlpython/data/zetina_p5.hlps"),
-        # ("hlpython/data/100ll.hlp", "hlpython/data/zetina_p5.hlps"),
-        # ("hlpython/data/ap20_c.hlp", "hlpython/data/p4_a05.hlps"),
-        # ("hlpython/data/cab20_c.hlp", "hlpython/data/p4_a05.hlps"),
-        ("hlpython/data/tr20_c.hlp", "hlpython/data/p4_a05.hlps"),
+        # ("hlp_zetina/data/10ll.hlp", "hlp_zetina/data/zetina_p5.hlps"),
+        # ("hlp_zetina/data/100ll.hlp", "hlp_zetina/data/zetina_p5.hlps"),
+        # ("hlp_zetina/data/ap20_c.hlp", "hlp_zetina/data/p4_a05.hlps"),
+        # ("hlp_zetina/data/cab20_c.hlp", "hlp_zetina/data/p4_a05.hlps"),
+        # ("hlp_zetina/data/tr20_c.hlp", "hlp_zetina/data/p4_a05.hlps"),
+        # ("hlp_zetina/data/USA423.hlp", "hlp_zetina/data/p4_a05.hlps"),
+        ("hlp_zetina/data/ap10_c_scaled_p3_reduced.hlp", "hlp_zetina/data/p2_a05.hlps"),
     ]
 
     project_root_path = Path(__file__).parent.parent
     for hlp, hlps in instances:
         hlp_file = str(project_root_path / hlp)
         hlps_file = str(project_root_path / hlps)
-        solver = HubLocationZetina()
-        solver.solve(hlp_file, hlps_file)
+        solver = HubLocationZetina().from_file(hlp_file, hlps_file)
+        solver.solve()
         print("Finished solving")
 
         sol = solver.solution
