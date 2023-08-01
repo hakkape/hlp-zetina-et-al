@@ -12,6 +12,7 @@ void read_hlp_instance(const char *hlp_file, const char *hlps_file)
     int k;
 
     int n_hubs;
+    int hub_allowed[10000];
 
     // # Read HLP settings
     hlps_input = open_file(hlps_file, "r");
@@ -65,13 +66,27 @@ void read_hlp_instance(const char *hlp_file, const char *hlps_file)
             } while (n = strtok(NULL, " "));
         } 
 
-        // close all hubs that are not possible
-        for (j = 0; j < n_hubs; j++)
+        // close all hubs that are not possible *this overrides assignments that the user erroneously allowed
+        // first assume none are allowed
+        for (i = 0; i< NN; i++)
         {
-            k = atoi(&possible_hubs[i]);
-            for (i = 0; i < NN; i++)
+            hub_allowed[i] = 0;
+        }
+        // read the allowed hubs
+        char *m = strtok(possible_hubs, " ");
+        do { 
+            k = atoi(m);
+            hub_allowed[k] = 1;
+        } while (m = strtok(NULL, " "));
+        // then set the not allowed hubs to closed
+        for (k = 0; k< NN; k++)
+        {
+            if (hub_allowed[k] == 0)
             {
-                not_eligible_hub[i][k] = 1;
+                for (i = 0; i< NN; i++)
+                {
+                    not_eligible_hub[i][k] = 1;
+                }
             }
         }
     }
