@@ -81,7 +81,10 @@ if __name__ == "__main__":
         # ("hlp_zetina/data/cab20_c.hlp", "hlp_zetina/data/p4_a05.hlps"),
         # ("hlp_zetina/data/tr20_c.hlp", "hlp_zetina/data/p4_a05.hlps"),
         # ("hlp_zetina/data/USA423.hlp", "hlp_zetina/data/p4_a05.hlps"),
-        ("hlp_zetina/data/ap10_c_scaled_p3_reduced.hlp", "hlp_zetina/data/p2_a05.hlps"),
+        # ("hlp_zetina/data/ap10_c_scaled_p3_reduced.hlp", "hlp_zetina/data/p2_a05.hlps"),
+        # ("hlp_zetina/data/cab50_c_scaled_p7_reduced.hlp", "hlp_zetina/data/p4_a05.hlps"),
+        # ("hlp_zetina/data/dhlf.hlp", "hlp_zetina/data/dhlf.hlps"),
+        ("hlp_zetina/data/turkish-network.hlp", "hlp_zetina/data/p4_a05.hlps"),
     ]
 
     project_root_path = Path(__file__).parent.parent
